@@ -108,6 +108,8 @@
 (defvar anything-howm-menu-buffer "*anything-howm-menu*")
 (defvar anything-howm-default-title "")
 (defvar anything-howm-data-directory "/path/to/howm-data-directory")
+(defvar anything-howm-file-name-extension "howm")
+
 
 ;;; Version
 
@@ -279,7 +281,7 @@ With prefix arg HERE, insert it at point."
 ;;(anything anything-c-source-buffers+-howm-title)
 
 (defun anything-howm-title-real-to-display (file-name)
-  (if (equal "howm" (file-name-extension file-name))
+  (if (equal anything-howm-file-name-extension (file-name-extension file-name))
       (anything-howm-title-get-title file-name)
     file-name))
 

@@ -179,8 +179,12 @@ With prefix arg HERE, insert it at point."
 (defun anything-howm-find-files (candidate)
   (anything-aif (anything-marked-candidates)
       (dolist (i it)
-        (find-file (anything-howm-select-file-by-title i)))
-    (find-file (anything-howm-select-file-by-title candidate))))
+	(progn
+	  (find-file (anything-howm-select-file-by-title i))
+	  (howm-mode)))
+    (progn
+      (find-file (anything-howm-select-file-by-title candidate))
+      (howm-mode))))
 
 (defun anything-howm-get-recent-title-list (recent-menu-list)
   (loop for recent-menu-x in recent-menu-list

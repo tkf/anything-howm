@@ -181,10 +181,10 @@ With prefix arg HERE, insert it at point."
       (dolist (i it)
 	(progn
 	  (find-file (anything-howm-select-file-by-title i))
-	  (howm-mode)))
+	  (howm-mode t)))
     (progn
       (find-file (anything-howm-select-file-by-title candidate))
-      (howm-mode))))
+      (howm-mode t))))
 
 (defun anything-howm-get-recent-title-list (recent-menu-list)
   (loop for recent-menu-x in recent-menu-list

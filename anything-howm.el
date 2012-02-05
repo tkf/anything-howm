@@ -160,6 +160,9 @@ With prefix arg HERE, insert it at point."
     (migemo)
     ))
 
+
+(defvar anything-howm-title-to-file-cache (make-hash-table :test 'equal))
+
 (defun anything-howm-persistent-action (candidate)
   (let ((buffer (get-buffer-create anything-howm-persistent-action-buffer)))
       (with-current-buffer buffer
@@ -170,11 +173,16 @@ With prefix arg HERE, insert it at point."
       (howm-mode t)))
 
 (defun anything-howm-select-file-by-title (title)
-  (loop for recent-menu-x in (howm-recent-menu anything-howm-recent-menu-number-limit)
-        for list-item-file  = (first recent-menu-x)
-        for list-item-name  = (second recent-menu-x)
-        if (string-equal title list-item-name)
-          return list-item-file))
+  (let ((cached-item-file (gethash title anything-howm-title-to-file-cache)))
+    (if cached-item-file
+        cached-item-file
+      (loop for recent-menu-x in (howm-recent-menu
+                                  anything-howm-recent-menu-number-limit)
+            for list-item-file  = (first recent-menu-x)
+            for list-item-name  = (second recent-menu-x)
+            if (string-equal title list-item-name)
+            return (puthash list-item-name list-item-file
+                            anything-howm-title-to-file-cache)))))
 
 (defun anything-howm-find-files (candidate)
   (anything-aif (anything-marked-candidates)
@@ -188,7 +196,10 @@ With prefix arg HERE, insert it at point."
 
 (defun anything-howm-get-recent-title-list (recent-menu-list)
   (loop for recent-menu-x in recent-menu-list
-        for list-item-name  = (second recent-menu-x)
+        for list-item-file = (first recent-menu-x)
+        for list-item-name = (second recent-menu-x)
+        do (puthash list-item-name list-item-file
+                    anything-howm-title-to-file-cache)
         collect list-item-name))
 
 (defun anything-howm-create-new-memo (text)

@@ -166,7 +166,7 @@ With prefix arg HERE, insert it at point."
         (erase-buffer)
         (insert-file-contents (anything-howm-select-file-by-title candidate))
         (goto-char (point-min)))
-      (pop-to-buffer buffer)
+      (anything-c-switch-to-buffer buffer)
       (howm-mode t)))
 
 (defun anything-howm-select-file-by-title (title)
